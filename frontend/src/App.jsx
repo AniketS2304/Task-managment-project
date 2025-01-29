@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardLayout from './Components/layouts/DashboardLayout.jsx';
-import AddTask from './pages/AddTask';
-import TaskList from './pages/TaskList';
+// import AddTask from './pages/AddTask.js';
+// import TaskList from './pages/TaskList';
 
 const App = () => {
   return (
