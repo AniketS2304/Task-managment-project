@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
 });
 
 // Register Route
-router.post("/register", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -90,7 +90,7 @@ router.post("/register", async (req, res) => {
 });
 
 // Auth Check Route
-router.get("/check", async (req, res) => {
+router.get("/login", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     

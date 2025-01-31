@@ -1,17 +1,24 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import DashboardLayout from './Components/layouts/DashboardLayout.jsx';
-// import AddTask from './pages/AddTask.js';
-// import TaskList from './pages/TaskList';
+import { Routes, Route } from "react-router-dom";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
+import TaskList from "./pages/TaskList";  // Import TaskList
+import CreateTask from "./pages/CreateTask";  // Import CreateTask
+import EditTask from "./pages/EditTask";  // Import EditTask
 
-const App = () => {
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/*" element={<DashboardLayout />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/tasks" element={<TaskList />} />
+      <Route path="/tasks/create" element={<CreateTask />} />
+      <Route path="/tasks/edit/:id" element={<EditTask />} />
+    </Routes>
   );
-};
+}
 
 export default App;

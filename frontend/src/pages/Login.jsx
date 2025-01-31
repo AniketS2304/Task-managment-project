@@ -1,57 +1,104 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // for redirecting after login
+import axios from "axios"; // Import Axios
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
-
+  const [isSubmitting, setIsSubmitting] = useState(false); // Track form submission state
+  const navigate = useNavigate(); // Hook for navigation after successful login
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+  
     try {
-      await login(email, password);
-      navigate("/dashboard"); // Redirect after successful login
+      const response = await fetch("http://localhost:5000/api/auth/login", { // Ensure correct backend URL
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json(); // Ensure the response is parsed as JSON
+  
+      if (response.ok) {
+        console.log("Login successful", data);
+        // Redirect after successful login
+        navigate("/dashboard");
+      } else {
+        setError(data.message || "Login failed, please try again.");
+      }
     } catch (error) {
-      setError("Login failed. Please check your email and password.");
+      setError("An error occurred while logging in.");
+      console.error(error);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email:</label>
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold mb-6">Login</h2>
+
+        {/* Error message */}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        <form onSubmit={handleSubmit}>
+          {/* Email */}
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email Address
+            </label>
             <input
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password:</label>
+
+          {/* Password */}
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Login
-            </button>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            disabled={isSubmitting} // Disable button while submitting
+          >
+            {isSubmitting ? "Logging in..." : "Login"}
+          </button>
+
+          {/* Signup link */}
+          <div className="mt-4 text-center">
+            <p className="text-sm">
+              Don't have an account?{" "}
+              <a href="/signup" className="text-blue-600 hover:text-blue-700">
+                Sign up
+              </a>
+            </p>
           </div>
         </form>
       </div>

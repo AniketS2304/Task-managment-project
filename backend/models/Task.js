@@ -6,7 +6,7 @@ const taskSchema = new mongoose.Schema({
   dueDate: { type: Date, required: true },
   status: { type: String, enum: ['Pending', 'Completed'], default: 'Pending' },
   priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Medium' },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Link to User
+  // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Link to User
   createdAt: { type: Date, default: Date.now },
 });
 
